@@ -1,0 +1,7 @@
+# Local secrets for `npm run preview` (Workers runtime).
+# NOT committed — copy values from .env.local. Same KEY=value format.
+BUNNY_STORAGE_ZONE=store-db
+BUNNY_STORAGE_PASSWORD=PASTE_YOUR_STORAGE_PASSWORD_HERE
+BUNNY_STORAGE_ENDPOINT=https://sg.storage.bunnycdn.com
+BUNNY_CDN_HOSTNAME=https://store-db.b-cdn.net
+MASTER_PASSWORD=200431
