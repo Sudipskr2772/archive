@@ -44,6 +44,56 @@ export function sanitizeFileName(name: string): string {
   return cleaned || `file-${Date.now()}`;
 }
 
+const MIME_BY_EXT: Record<string, string> = {
+  mp4: "video/mp4",
+  m4v: "video/x-m4v",
+  mov: "video/quicktime",
+  webm: "video/webm",
+  ogv: "video/ogg",
+  mkv: "video/x-matroska",
+  avi: "video/x-msvideo",
+  mp3: "audio/mpeg",
+  wav: "audio/wav",
+  ogg: "audio/ogg",
+  oga: "audio/ogg",
+  flac: "audio/flac",
+  m4a: "audio/mp4",
+  aac: "audio/aac",
+  opus: "audio/opus",
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  gif: "image/gif",
+  webp: "image/webp",
+  svg: "image/svg+xml",
+  avif: "image/avif",
+  bmp: "image/bmp",
+  ico: "image/x-icon",
+  pdf: "application/pdf",
+  txt: "text/plain",
+  md: "text/markdown",
+  csv: "text/csv",
+  json: "application/json",
+  xml: "text/xml",
+  html: "text/html",
+  htm: "text/html",
+  css: "text/css",
+  js: "text/javascript",
+  zip: "application/zip",
+  gz: "application/gzip",
+  tar: "application/x-tar",
+};
+
+// Browsers only play a file inline when it is served with a real content
+// type. `File.type` from the browser is unreliable (often empty), so resolve
+// the MIME type from the extension first.
+export function mimeForFile(name: string, fallback = ""): string {
+  const ext = name.split(".").pop()?.toLowerCase() || "";
+  if (MIME_BY_EXT[ext]) return MIME_BY_EXT[ext];
+  if (fallback && fallback !== "application/octet-stream") return fallback;
+  return "application/octet-stream";
+}
+
 export function parseTags(input: unknown): string[] {
   if (Array.isArray(input))
     return input.map(String).map((t) => t.trim()).filter(Boolean).slice(0, 20);

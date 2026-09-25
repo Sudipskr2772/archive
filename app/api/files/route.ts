@@ -6,7 +6,7 @@ import {
   listBunnyFiles,
   uploadBunnyFile,
 } from "@/lib/bunny";
-import { sanitizeFileName } from "@/lib/utils";
+import { mimeForFile, sanitizeFileName } from "@/lib/utils";
 
 function denied() {
   return NextResponse.json({ error: "Wrong password" }, { status: 401 });
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     for (const f of incoming) {
       const name = sanitizeFileName(f.name || `upload-${Date.now()}`);
       const buf = Buffer.from(await f.arrayBuffer());
-      await uploadBunnyFile(name, buf, f.type || "application/octet-stream");
+      await uploadBunnyFile(name, buf, mimeForFile(f.name, f.type));
       uploaded.push(name);
     }
     const files = await listBunnyFiles();
